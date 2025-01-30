@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Converter</title>
+	    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+    </style>
+    <script>
+        async function convert() {
+            const mproperty = document.getElementById('mproperty').value;
+            const value = parseFloat(document.getElementById('value').value);
+            const iunit = document.getElementById('input_unit').value;
+            const ounit = document.getElementById('output_unit').value;
+
+            const response = await fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'  // Include CSRF token for security
+                },
+                body: JSON.stringify({
+                    mproperty: mproperty,
+                    value: value,
+                    input_unit: iunit,
+                    output_unit: ounit
+                })
+            });
+
+            const data = await response.json();
+            document.getElementById('result').innerText = 'Result: ' + data.result;
+        }
+    </script>
+</head>
+<body>
+    <h1>Unit Converter</h1>
+    <form onsubmit="event.preventDefault(); convert();">
+        <label for="mproperty">Measurement Property:</label>
+        <select id="mproperty" required>
+            <option value="length">Length</option>
+            <option value="weight">Weight</option>
+            <option value="temperature">Temperature</option>
+        </select>
+        <br><br>
+
+        <label for="value">Value:</label>
+        <input type="number" id="value" step="any" required>
+        <br><br>
+
+        <label for="input_unit">Input Unit:</label>
+        <select id="input_unit" required>
+            <option value="centimeter">Centimeter</option>
+            <option value="inche">Inch</option>
+            <option value="foot">Foot</option>
+            <option value="kilogram">Kilogram</option>
+            <option value="pound">Pound</option>
+            <option value="ounce">Ounce</option>
+            <option value="celsius">Celsius</option>
+            <option value="fahrenheit">Fahrenheit</option>
+            <option value="kelvin">Kelvin</option>
+        </select>
+        <br><br>
+
+        <label for="output_unit">Output Unit:</label>
+        <select id="output_unit" required>
+            <option value="centimeter">Centimeter</option>
+            <option value="inche">Inch</option>
+            <option value="foot">Foot</option>
+            <option value="kilogram">Kilogram</option>
+            <option value="pound">Pound</option>
+            <option value="ounce">Ounce</option>
+            <option value="celsius">Celsius</option>
+            <option value="fahrenheit">Fahrenheit</option>
+            <option value="kelvin">Kelvin</option>
+        </select>
+        <br><br>
+
+        <button type="submit">Convert</button>
+    </form>
+
+    <h2 id="result">Result: </h2>
+</body>
+</html>
